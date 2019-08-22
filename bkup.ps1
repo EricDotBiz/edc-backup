@@ -205,11 +205,6 @@ function resetTimerPrompt (){
 }
 
 function backup (){
-	if($pauseonbackup){ 
-		Write-Host "Script is paused. Waiting for backup..."
-		pause 
-	}
-	
 	Write-Output "($(get-date -f HH:mm-dd/MM/yyyy))  Backing up to $($bkupdirs[$bkupindex])" | Tee-Object -file $logPath/$logName -append
 	$bkupdir = $bkupdirs[$bkupindex]
 	Xcopy "$wrkdir" "$bkupdir" /s /f /y /c /d | Tee-Object -file $logPath/$logName -append
@@ -217,6 +212,10 @@ function backup (){
 	if($bkupindex -ge $bkupdirs.Length) { $script:bkupindex = 0 }
 	Write-Output "Back up complete. Next back up directory set to $($bkupdirs[$bkupindex])"
 	
+	if($pauseonbackup){ 
+		Write-Host "Script is paused."
+		pause 
+	}
 }
 
 setVars
